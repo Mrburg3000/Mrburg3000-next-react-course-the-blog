@@ -1,20 +1,24 @@
 "use client";
 
+import { logoutAction } from "@/actions/login/logout-action";
 import clsx from "clsx";
 import {
     CircleXIcon,
     FileTextIcon,
     HouseIcon,
     MenuIcon,
+    HourglassIcon,
+    LogOutIcon,
     PlusIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 export function MenuAdmin() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -30,7 +34,7 @@ export function MenuAdmin() {
         "sm:overflow-visible sm:h-auto"
     );
     const linkClasses = clsx(
-        "[&>svg]:w-[16px] [&>svg]:h-[16px] px-4",
+        "[&>svg]:w-4 [&>svg]:h-4 px-4",
         "flex items-center justify-start gap-2 cursor-pointer",
         "transition hover:bg-slate-800 rounded-lg",
         "h-10",
@@ -41,6 +45,14 @@ export function MenuAdmin() {
         "text-blue-200 italic",
         "sm:hidden"
     );
+
+    function handleLogout(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+        e.preventDefault();
+
+        startTransition(async () => {
+            await logoutAction();
+        });
+    }
 
     return (
         <nav className={navClasses}>
@@ -76,6 +88,22 @@ export function MenuAdmin() {
                 <PlusIcon />
                 Criar post
             </Link>
+
+            <a onClick={handleLogout} href="#" className={linkClasses}>
+                {isPending && (
+                    <>
+                        <HourglassIcon />
+                        Aguarde...
+                    </>
+                )}
+
+                {!isPending && (
+                    <>
+                        <LogOutIcon />
+                        Sair
+                    </>
+                )}
+            </a>
         </nav>
     );
 }

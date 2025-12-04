@@ -1,4 +1,4 @@
-import { postRepository } from '@/repositories/post/post/index';
+import { postRepository } from '@/repositories/post/index';
 import { cache } from 'react';
 
 export const findPostByIdAdmin = cache(async (id: string) => {

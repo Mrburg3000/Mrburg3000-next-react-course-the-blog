@@ -1,5 +1,4 @@
 import ErrorMessage from "@/components/ErrorMessage";
-import clsx from "clsx";
 
 export default function NotFoundPage() {
     return (

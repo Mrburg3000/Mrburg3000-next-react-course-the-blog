@@ -48,8 +48,11 @@ export function ManagePostForm(props: ManagePostFormProps) {
         actionsMap[mode],
         initialState
     );
+    console.log("Form state updated:", state);
     useEffect(() => {
+        console.log("State errors changed:", state.errors);
         if (state.errors.length > 0) {
+            console.log("Showing error toasts:", state.errors);
             toast.dismiss();
             state.errors.forEach((error) => toast.error(error));
         }
@@ -88,6 +91,13 @@ export function ManagePostForm(props: ManagePostFormProps) {
                     readOnly
                 />
 
+                {/* Hidden input to send ID in FormData */}
+                <input
+                    type="hidden"
+                    name="id"
+                    value={formState.id || ""}
+                />
+
                 <InputText
                     labelText="Slug"
                     name="slug"
@@ -96,6 +106,13 @@ export function ManagePostForm(props: ManagePostFormProps) {
                     defaultValue={formState.slug}
                     disabled={isPending}
                     readOnly
+                />
+
+                {/* Hidden input to send Slug in FormData */}
+                <input
+                    type="hidden"
+                    name="slug"
+                    value={formState.slug || ""}
                 />
 
                 <InputText
@@ -131,6 +148,13 @@ export function ManagePostForm(props: ManagePostFormProps) {
                     setValue={setContentValue}
                     textAreaName="content"
                     disabled={isPending}
+                />
+
+                {/* Hidden input to ensure content is sent in FormData */}
+                <input
+                    type="hidden"
+                    name="content"
+                    value={contentValue}
                 />
 
                 <ImageUploader disabled={isPending} />

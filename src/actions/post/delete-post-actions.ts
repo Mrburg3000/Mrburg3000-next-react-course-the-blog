@@ -1,18 +1,26 @@
 "use server";
 
-import { postRepository } from "@/repositories/post/post/index";
-import { revalidateTag } from "next/cache";
+import { postRepository } from "@/repositories/post";
+import { revalidatePath } from "next/cache";
+import { verifyLoginSession } from "@/lib/login/manage-login";
 
 export async function deletePostAction(id: string) {
+    const isAuthenticated = await verifyLoginSession();
+
+    if (!isAuthenticated) {
+        return {
+            error: "Faça login novamente em outra aba",
+        };
+    }
+
     if (!id || typeof id !== "string") {
         return {
             error: "Dados inválidos",
         };
     }
 
-    let post;
     try {
-        post = await postRepository.delete(id);
+        await postRepository.delete(id);
     } catch (e: unknown) {
         if (e instanceof Error) {
             return {
@@ -24,8 +32,8 @@ export async function deletePostAction(id: string) {
         };
     }
 
-    revalidateTag("posts");
-    revalidateTag(`post-${post.slug}`);
+    revalidatePath("/admin/posts");
+    revalidatePath("/");
 
     return {
         error: "",

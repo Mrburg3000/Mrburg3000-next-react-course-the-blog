@@ -1,36 +1,18 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Container } from "@/components/Container";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { ToastifyContainer } from "@/components/ToastifyContainer";
+import { PostsList } from "@/components/PostsList";
+import { SpinLoader } from "@/components/SpinLoader";
+import { Suspense } from "react";
+import { PostFeatured } from "@/components/PostFeatured";
 
-export const metadata: Metadata = {
-    title: {
-        default: "The blog - Este é um blog com Next.js",
-        template: "%s | The Blog",
-    },
-    description: "Essa seria a descrição dessa página.",
-};
-
-type RootLayoutProps = {
-    children: React.ReactNode;
-};
-
-export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
+export default function HomePage() {
     return (
-        <html lang="pt-BR">
-            <body>
-                <Container>
-                    <Header />
+        <>
+            <Suspense fallback={<SpinLoader className='min-h-20 mb-16' />}>
+                <PostFeatured />
+            </Suspense>
 
-                    {children}
-
-                    <Footer />
-                </Container>
-
-                <ToastifyContainer />
-            </body>
-        </html>
+            <Suspense fallback={<SpinLoader className='min-h-20 mb-16' />}>
+                <PostsList />
+            </Suspense>
+        </>
     );
 }

@@ -1,4 +1,4 @@
-import { postRepository } from "@/repositories/post/post/index";
+import { postRepository } from "@/repositories/post/index";
 import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
 import { cache } from "react";
